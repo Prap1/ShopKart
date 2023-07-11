@@ -5,6 +5,7 @@ import {
   createProductController,
   deleteProductController,
   getProductController,
+  getProductRatingController,
   getSingleProductController,
  
   productCategoryController,
@@ -12,6 +13,7 @@ import {
   productFiltersController,
   productListController,
   productPhotoController,
+  productRatingController,
   realtedProductController,
   searchProductController,
   updateProductController,
@@ -68,7 +70,10 @@ router.get("/related-product/:pid/:cid", realtedProductController);
 //category wise product
 router.get("/product-category/:slug", productCategoryController);
 
-
+//rating
+router.post("/product/:pid/rating", requireSignIn,productRatingController);
+//get product rating
+router.get("/product/:pid/rating", getProductRatingController);
 
 //payments routes
 //token

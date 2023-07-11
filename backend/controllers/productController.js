@@ -375,3 +375,41 @@ export const brainTreePaymentController = async (req, res) => {
     console.log(error);
   }
 };
+export const productRatingController = async (req, res) => {
+  try {
+    const { productId, rating, comment } = req.body;
+    const product = await productModel.findById(productId);
+    product.ratings.push({ rating, comment });
+    await product.save();
+    res.status(200).send({
+      success: true,
+      message: "Product Rated Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in Rating Product",
+    });
+  }
+};
+
+// get product rating
+export const getProductRatingController = async (req, res) => {
+  try {
+    const productId = req.params.pid;
+    const product = await productModel.findById(productId);
+    res.status(200).send({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error While Getting product Rating",
+    });
+  }
+};

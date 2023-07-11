@@ -13,13 +13,9 @@ const Policy = () => {
           />
         </div>
         <div className="col-md-4">
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
-          <p>add privacy policy</p>
+          <p className="policy">
+          We value your privacy. We collect and use your personal information to process orders and provide a personalized experience. We may share information with trusted partners, protect rights, and comply with the law. We take reasonable measures to secure data. For more details, please review our Privacy Policy.
+          </p>
         </div>
       </div>
     </Layout>

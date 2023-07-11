@@ -10,7 +10,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  //initalp details
+
   useEffect(() => {
     if (params?.slug) getProduct();
   }, [params?.slug]);
@@ -37,6 +37,16 @@ const ProductDetails = () => {
       console.log(error);
     }
   };
+
+  const addRatingComment = async(req,res)=>{
+    try {
+      const {data}=await axios.post(
+        `/api/v1/product/product/:pid/rating`
+      );
+    } catch (error) {
+      
+    }
+  }
   return (
     <Layout>
       <div className="row container product-details">
