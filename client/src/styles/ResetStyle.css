@@ -1,0 +1,59 @@
+/* Auth Page Styles */
+.auth-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+  
+  .auth-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .auth-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .auth-container .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .auth-container label {
+    font-weight: bold;
+  }
+  
+  .auth-container input[type="email"],
+  .auth-container input[type="password"],
+  .auth-container input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .auth-container button[type="submit"] {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .auth-container button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  
+  .auth-container .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* Other Styles */
+  /* Add any additional styles you need for your authentication pages */
+  

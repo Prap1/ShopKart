@@ -29,6 +29,7 @@ import Brands from "./pages/Brands";
 import CreateBrand from "./pages/Admin/CreateBrand";
 import BrandProduct from "./pages/BrandProduct";
 import VerificationPage from "./pages/VerificationPage";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPasssword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

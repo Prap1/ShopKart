@@ -61,3 +61,11 @@
 .forgot-btn:hover {
   color: white !important;
 }
+.password-toggle {
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.password-container{
+  display: flex;
+}

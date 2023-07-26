@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
+import { BiHide, BiShow } from "react-icons/bi";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -13,6 +14,7 @@ const Register = () => {
   const [address, setAddress] = useState("");
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
+  const [passwordShown, setPasswordShown] = useState(false);
 
   // Form submission function
   const handleSubmit = async (e) => {
@@ -36,6 +38,10 @@ const Register = () => {
       console.log(error);
       toast.error("Something went wrong");
     }
+  };
+
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
   };
 
   return (
@@ -66,9 +72,9 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-3 password-container">
             <input
-              type="password"
+              type={passwordShown ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
@@ -76,6 +82,9 @@ const Register = () => {
               placeholder="Enter Your Password"
               required
             />
+            <span onClick={togglePassword} className="password-toggle">
+              {passwordShown ? <BiShow aria-label="Hide Password" /> : <BiHide aria-label="Show Password" />}
+            </span>
           </div>
           <div className="mb-3">
             <input
