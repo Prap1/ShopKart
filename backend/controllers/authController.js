@@ -203,20 +203,14 @@ export const verifyEmailController = async (req, res) => {
 
 export const forgotPasswordController = async (req, res) => {
   try {
-    const { email, answer, newPassword } = req.body;
+    const { email } = req.body;
 
     if (!email) {
       res.status(400).send({ message: "Email is required" });
     }
-    if (!answer) {
-      res.status(400).send({ message: "Answer is required" });
-    }
-    if (!newPassword) {
-      res.status(400).send({ message: "New password is required" });
-    }
 
     // Check user
-    const user = await userModel.findOne({ email, answer });
+    const user = await userModel.findOne({ email });
 
     // Validation
     if (!user) {
@@ -226,18 +220,92 @@ export const forgotPasswordController = async (req, res) => {
       });
     }
 
-    const hashed = await hashPassword(newPassword);
-    await userModel.findByIdAndUpdate(user._id, { password: hashed });
+    // Generate password reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    await user.save();
 
-    res.status(200).send({
-      success: true,
-      message: "Password reset successfully",
+    // Send password reset email
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: "praphool47@gmail.com",
+        pass: "mgxlfctsihuhysco",
+      },
+    });
+
+    const mailOptions = {
+      from: "praphool47@gmail.com",
+      to: user.email,
+      subject: "Password Reset",
+      html: `
+        <p>You are receiving this email because you (or someone else) has requested a password reset for your account.</p>
+        <p>Please click on the following link to reset your password:</p>
+        <a href="http://localhost:3000/reset-password/${resetToken}">Reset Password</a>
+        <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+        return res.status(500).send({
+          success: false,
+          message: "Error sending password reset email",
+          error,
+        });
+      } else {
+        console.log("Email sent:", info.response);
+        return res.status(200).send({
+          success: true,
+          message: "Password reset email sent",
+        });
+      }
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Something went wrong",
+      message: "Error in forgot password",
+      error,
+    });
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    // Find user by reset token and check token expiration
+    const user = await userModel.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Invalid or expired reset token",
+      });
+    }
+
+    // Reset password
+    const hashedPassword = await hashPassword(password);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in reset password",
       error,
     });
   }
@@ -338,4 +406,3 @@ export const orderStatusController = async (req, res) => {
     });
   }
 };
-

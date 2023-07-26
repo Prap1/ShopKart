@@ -70,10 +70,12 @@ router.get("/related-product/:pid/:cid", realtedProductController);
 //category wise product
 router.get("/product-category/:slug", productCategoryController);
 
-//rating
-router.post("/product/:pid/rating", requireSignIn,productRatingController);
-//get product rating
-router.get("/product/:pid/rating", getProductRatingController);
+// rating
+router.post("/product/:slug/rating", requireSignIn, productRatingController);
+
+// get product rating and comments
+router.get("/product/:slug/rating", getProductRatingController);
+
 
 //payments routes
 //token

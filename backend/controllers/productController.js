@@ -377,39 +377,66 @@ export const brainTreePaymentController = async (req, res) => {
 };
 export const productRatingController = async (req, res) => {
   try {
-    const { productId, rating, comment } = req.body;
-    const product = await productModel.findById(productId);
+    const { slug } = req.params;
+    const { rating, comment } = req.body;
+
+    const product = await productModel.findOne({ slug });
+    if (!product) {
+      return res.status(404).send({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
     product.ratings.push({ rating, comment });
+    product.numReviews = product.ratings.length; // Update the number of reviews
+
     await product.save();
+
     res.status(200).send({
       success: true,
-      message: "Product Rated Successfully",
+      message: "Product rated and commented successfully",
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error in Rating Product",
+      message: "Error in rating and commenting on product",
     });
   }
 };
-
-// get product rating
 export const getProductRatingController = async (req, res) => {
   try {
-    const productId = req.params.pid;
-    const product = await productModel.findById(productId);
+    const { slug } = req.params;
+
+    const product = await productModel.findOne({ slug });
+
+    if (!product) {
+      return res.status(404).send({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    const { rating, comment } = product.ratings[product.ratings.length - 1];
+
+    const numReviews = product.ratings.length; // Update the number of reviews
+    const comments = product.ratings.map((rating) => rating.comment); // Retrieve all the comments
+
     res.status(200).send({
       success: true,
-      product,
+      rating,
+      comment,
+      numReviews,
+      comments,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error While Getting product Rating",
+      message: "Error in retrieving product rating and comments",
     });
   }
 };

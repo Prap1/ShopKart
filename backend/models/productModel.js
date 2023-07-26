@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,7 +18,7 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   category: {
-    type: mongoose.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: true,
   },
@@ -43,6 +44,10 @@ const productSchema = new mongoose.Schema({
       },
     },
   ],
+  numReviews: {
+    type: Number,
+    default: 0,
+  },
 });
 
-export default mongoose.model("Products", productSchema);
+export default mongoose.model("Product", productSchema);
